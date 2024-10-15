@@ -10,7 +10,7 @@ setting_details all_settings[] = {
         {"type",                    setting_id_t::TYPE,                     false,  true,   false},
         {"command",                 setting_id_t::COMMAND,                  false,  true,   true },
         {"working-dir",             setting_id_t::WORKING_DIR,              false,  true,   false},
-        {"env-file",                setting_id_t::ENV_FILE,                 false,  true,   false},
+        {"env-file",                setting_id_t::ENV_FILE,                 false,  true,   true },
         {"socket-listen",           setting_id_t::SOCKET_LISTEN,            false,  true,   false},
         {"socket-permissions",      setting_id_t::SOCKET_PERMISSIONS,       false,  true,   false},
         {"socket-uid",              setting_id_t::SOCKET_UID,               false,  true,   false},

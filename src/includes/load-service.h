@@ -1,3 +1,4 @@
+
 #ifndef LOAD_SERVICE_H_INCLUDED
 #define LOAD_SERVICE_H_INCLUDED 1
 
@@ -1262,6 +1263,7 @@ class service_settings_wrapper
     string working_dir;
     string pid_file;
     string env_file;
+    list<pair<unsigned,unsigned>> env_file_offsets;
 
     bool export_passwd_vars = false;
     bool export_service_name = false;
@@ -1514,7 +1516,7 @@ void process_service_line(settings_wrapper &settings, const char *name, const ch
             settings.working_dir = read_setting_value(input_pos, i, end, nullptr);
             break;
         case setting_id_t::ENV_FILE:
-            settings.env_file = read_setting_value(input_pos, i, end, nullptr);
+	    read_setting_value(settings.env_file, setting_op, input_pos, i, end, &settings.env_file_offsets);
             break;
         #if SUPPORT_CGROUPS
         case setting_id_t::RUN_IN_CGROUP:

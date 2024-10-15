@@ -548,20 +548,23 @@ service_record * dirload_service_set::load_reload_service(const char *fullname, 
         // and so we need to calculate a fresh mapping on each process invocation).
         environment::env_map srv_envmap;
 
-        if (!settings.env_file.empty()) {
-            try {
-                if (settings.env_file[0] == '/') {
-                    // (don't allocate a string if we don't have to)
-                    read_env_file(settings.env_file.c_str(), false, srv_env, true);
-                }
-                else {
-                    std::string fullpath = combine_paths(service_dsc_dir, settings.env_file.c_str());
-                    read_env_file(fullpath.c_str(), false, srv_env, true);
-                }
-            } catch (const std::system_error &se) {
-                throw service_load_exc(name, std::string("could not load environment file: ") + se.what());
-            }
-        }
+	for (pair<unsigned, unsigned>& env_offset : settings.env_file_offsets) {
+	  std::string env = settings.env_file.substr(env_offset.first, env_offset.second - env_offset.first);
+	  if (!env.empty()) {
+	      try {
+		  if (env[0] == '/') {
+		      // (don't allocate a string if we don't have to)
+		      read_env_file(env.c_str(), false, srv_env, true);
+		  }
+		  else {
+		      std::string fullpath = combine_paths(service_dsc_dir, env.c_str());
+		      read_env_file(fullpath.c_str(), false, srv_env, true);
+		  }
+	      } catch (const std::system_error &se) {
+		  throw service_load_exc(name, std::string("could not load environment file: ") + se.what());
+	      }
+	  }
+	}
 
         srv_envmap = srv_env.build(main_env);
 
